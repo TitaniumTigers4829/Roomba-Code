@@ -9,6 +9,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class DriveSubsystem extends SubsystemBase {
   public final WPI_TalonFX m_frontLeftDrive;
@@ -20,6 +25,10 @@ public class DriveSubsystem extends SubsystemBase {
   public final MotorControllerGroup m_rightDrive;
 
   public final DifferentialDrive m_robotDrive;
+
+  NetworkTableInstance tableInstance;
+  NetworkTable baseTable;
+  NetworkTableEntry entry;
 
   public DriveSubsystem() {
     m_frontLeftDrive = new WPI_TalonFX(2);
@@ -35,17 +44,18 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightDrive = new MotorControllerGroup(m_frontRightDrive, m_backRightDrive);
 
     m_robotDrive = new DifferentialDrive(m_leftDrive, m_rightDrive);
+
+    this.tableInstance = NetworkTableInstance.getDefault();
+    this.baseTable = this.tableInstance.getTable("climbZerosTable");
+    this.entry = this.baseTable.getEntry("leftClimbHookZero");
   }
 
-/*
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("test", entry.getDouble(-1));
   }
 
-  @Override
-  public void simulationPeriodic() {
-  }
-*/
   /**Arcade Joystick. 
    * @param speed throttle speed.
    * @param rotation direction; 1 is turning clockwise.*/

@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Drive;
@@ -33,6 +37,21 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, stick::getY, stick::getX));
     // Configure the button bindings
     configureButtonBindings();
+
+    NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
+    // tableInstance.setServerTeam(4829);
+    NetworkTable baseTable = tableInstance.getTable("climbZerosTable");
+    
+    NetworkTableEntry leftClimbZeroEntry = baseTable.getEntry("leftClimbHookZero");
+    NetworkTableEntry rightClimbZeroEntry = baseTable.getEntry("rightClimbHookZero");
+
+    NetworkTableEntry leftClimbEntry = baseTable.getEntry("leftClimbHookHeight");
+    NetworkTableEntry rightClimbEntry = baseTable.getEntry("arightClimbHookHeight");
+
+    leftClimbEntry.setDouble(69);
+    rightClimbEntry.setDouble(42);
+
+    SmartDashboard.putNumber("test", leftClimbZeroEntry.getDouble(-1));
   }
 
   /**
